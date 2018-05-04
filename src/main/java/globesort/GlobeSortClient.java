@@ -1,6 +1,5 @@
 package globesort;
 
-import java.util.Date;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -41,13 +40,19 @@ public class GlobeSortClient {
 
     public void run(Integer[] values) throws Exception {
         System.out.println("Pinging " + serverStr + "...");
+	long start = System.currentTimeMillis();
         serverStub.ping(Empty.newBuilder().build());
+	long end = System.currentTimeMillis();
         System.out.println("Ping successful.");
+	System.out.println("Ping time: "+(end-start)+"ms");
 
         System.out.println("Requesting server to sort array");
         IntArray request = IntArray.newBuilder().addAllValues(Arrays.asList(values)).build();
+	start = System.currentTimeMillis();
         IntArray response = serverStub.sortIntegers(request);
+	end = System.currentTimeMillis();
         System.out.println("Sorted array");
+	System.out.println("Total invocation time: "+(end-start)+"ms");
     }
 
     public void shutdown() throws InterruptedException {
@@ -84,8 +89,6 @@ public class GlobeSortClient {
     }
 
     public static void main(String[] args) throws Exception {
-	Date date = new Date();
-	long start = date.getTime();
         Namespace cmd_args = parseArgs(args);
         if (cmd_args == null) {
             throw new RuntimeException("Argument parsing failed");
@@ -99,8 +102,5 @@ public class GlobeSortClient {
         } finally {
             client.shutdown();
         }
-	long end = date.getTime();
-	long runtime = end-start;
-	System.out.println("Invocation time: "+runtime);
     }
 }
