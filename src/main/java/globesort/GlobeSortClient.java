@@ -1,6 +1,5 @@
 package globesort;
 
-import java.util.Date;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -84,8 +83,6 @@ public class GlobeSortClient {
     }
 
     public static void main(String[] args) throws Exception {
-	Date date = new Date();
-	long start = date.getTime();
         Namespace cmd_args = parseArgs(args);
         if (cmd_args == null) {
             throw new RuntimeException("Argument parsing failed");
@@ -99,8 +96,5 @@ public class GlobeSortClient {
         } finally {
             client.shutdown();
         }
-	long end = date.getTime();
-	long runtime = end-start;
-	System.out.println("Invocation time: "+runtime);
     }
 }
